@@ -1,6 +1,5 @@
 # CharPixel
-
-Turn images into shareable ASCII art in the browser.
+Turn images into shareable ASCII art in the browser, with live detail controls and share-ready PNG exports.
 
 ## Features
 
