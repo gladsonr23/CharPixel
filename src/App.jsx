@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Copy, Download, FileImage, ImageUp, RotateCcw, Sparkles, WandSparkles } from 'lucide-react';
 import charPixelMark from './assets/charpixel-mark.png';
+import CRTWarp from './components/CRTWarp';
 const RAMP = '@%#*+=-:. ';
 const Brand = ({ as: Tag = 'div', ...props }) => <Tag {...props} className={`brand ${props.className || ''}`}><span>CharPixel</span><img className="brand-mark" src={charPixelMark} alt="ASCII hand and cursor" /></Tag>;
 const AuraButton = ({ children, className = '', ...props }) => <div className={`aura aura-glow ${className}`}><button {...props}>{children}</button></div>;
 const ASCIIText = ({ text }) => <span className="ascii-text" aria-label={text}>{text.split('').map((c, i) => <span style={{ '--i': i }} key={`${c}-${i}`}>{c}</span>)}</span>;
-const PatternWaves = () => <div className="pattern-waves" aria-hidden="true"><i /><i /><i /></div>;
+const PatternWaves = () => <div className="pattern-waves" aria-hidden="true"><CRTWarp className="studio-crt" /><i /><i /><i /></div>;
 const PixelCard = ({ children }) => <div className="pixel-card"><div className="pixel-grid" aria-hidden="true" />{children}</div>;
 function toAscii(src, columns) { return new Promise((resolve, reject) => { const image = new Image(); image.onload = () => { const width = Math.max(20, Number(columns)); const height = Math.max(1, Math.round(image.height / image.width * width * .48)); const canvas = document.createElement('canvas'); canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d', { willReadFrequently: true }); ctx.drawImage(image, 0, 0, width, height); const { data } = ctx.getImageData(0, 0, width, height); let result = ''; for (let y = 0; y < height; y += 1) { for (let x = 0; x < width; x += 1) { const p = (y * width + x) * 4; const b = (data[p] * .299 + data[p + 1] * .587 + data[p + 2] * .114) / 255; result += RAMP[Math.min(RAMP.length - 1, Math.floor(b * RAMP.length))]; } result += '\n'; } resolve(result); }; image.onerror = () => reject(new Error('That image could not be read.')); image.src = src; }); }
 export default function App() {
